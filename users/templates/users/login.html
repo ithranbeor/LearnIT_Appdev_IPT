@@ -1,0 +1,229 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>LearnIT - Login</title>
+<style>
+  body {
+    background: url("{% static 'images/LIT-V3-1.png' %}") center center no-repeat;
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+
+  .login-container {
+    background-color: rgba(255, 255, 255, 0.9); 
+    padding: 30px;
+    border-radius: 40px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 300px;
+  }
+  .welcome-container {
+    position: absolute;
+    top: 70px;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+  }
+  h2 {
+    color: #ffffff;
+    margin-bottom: 15px;
+    font-size: 30px;
+    margin-right: 1%;
+    text-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+  }
+  .it-part2 {
+    color: #89E9F3;
+    font-size: 30px;
+    margin-left: -3%;
+  }
+  h1 {
+    color: #4f4557;
+    margin-bottom: 20px;
+    font-size: 20px;
+  }
+
+  .password-input-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  input[type="text"],
+  .password-input-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    box-sizing: border-box;
+    padding-right: 35px;
+    margin: 1%;
+  }
+
+  .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    user-select: none; 
+    font-size: 18px; 
+    color: #555; 
+  }
+
+  button[type="submit"] {
+    background-color: #ffffff;
+    color: #4f4557;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #89E9F3;
+  }
+
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
+
+  p {
+    margin-top: 15px;
+    color: #555;
+    font-size: 14px;
+  }
+
+  a {
+    color: #4f4557;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer; /* cursor for potential interaction */
+  }
+
+  .logo img {
+    margin-right: 10px; /* Space between logo and text */
+    height: 40px; /* Adjusted logo height */
+    color: #ffffff;
+    font-size: 0px; /* Hide the text color for the logo */
+  }
+
+  .logo .it-part {
+    color: #89E9F3; /* Changed the color of "IT" to a light blue */
+  }
+
+  .skip-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+  }
+
+  .skip-button:hover {
+    text-decoration: underline;
+  }
+
+  .tagline {
+    color: hsl(0, 0%, 100%);
+    font-size: 14px;
+    margin-bottom: 20px;
+    text-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+    font-style: italic;
+    font-weight: 300;
+    margin-right: 1%;
+  }
+  .version-label {
+  position: fixed;
+  bottom: 10px;
+  left: 20px;
+  font-size: 12px;
+  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+</style>
+</head>
+<body>
+  <div class="logo" onclick="goToHome()">
+    <img src="{% static 'images/LITlogo.png' %}" alt="LearnIT Logo">
+    Learn<span class="it-part">IT</span>
+  </div>
+  <a href="#" class="skip-button" onclick="skipLogin()">Skip</a>
+
+  <div class="welcome-container">
+    <h2>Welcome to Learn <span class="it-part2">IT</span></h2> <p class="tagline">"Where IT Knowledge Comes to Life."</p>
+  </div>
+
+  <div class="login-container">
+    <h1>Login to Continue</h1>
+    <form method="post">
+      {% csrf_token %}
+      <input type="text" name="username" placeholder="Username" required><br>
+      <div class="password-input-container">
+        <input type="password" name="password" id="password" placeholder="Password" required>
+        <span class="toggle-password" onclick="togglePassword()">
+          &#128065;
+        </span>
+      </div>
+      <button type="submit">Sign-In</button>
+      <p><a href="{% url 'password_reset' %}">Forgot Password?</a></p>
+    </form>
+    {% if error %}<p class="error-message">{{ error }}</p>{% endif %}
+    <p>Don't have an account? <a href="{% url 'signup' %}">Click here</a></p>
+  </div>
+  <div class="version-label">Version 3.0.0</div>
+
+
+  <script>
+    function goToHome() {
+      window.location.href = '#';
+    }
+
+    function skipLogin() {
+      window.location.href = "{% url 'video_list' %}";
+      console.log('Skip button clicked');
+    }
+
+    function togglePassword() {
+      const passwordInput = document.getElementById('password');
+      const toggleIcon = document.querySelector('.toggle-password');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.innerHTML = '&#128064;';
+      } else {
+        passwordInput.type = 'password';
+        toggleIcon.innerHTML = '&#128065;'; 
+      }
+    }
+  </script>
+</body>
+</html>

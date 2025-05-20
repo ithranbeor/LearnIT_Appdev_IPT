@@ -1,0 +1,214 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LearnIT - Edit Video</title>
+    <style>
+        body {
+            background-color: #4f4557;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 400px;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .logo img {
+            margin-right: 10px;
+            height: 40px;
+            color: #ffffff;
+            font-size: 0px;
+        }
+
+        .logo .it-part {
+            color: #89E9F3;
+        }
+
+        h2 {
+            color: #4f4557;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 15px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button[type="submit"] {
+            background-color: #ffffff;
+            color: #4f4557;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #89E9F3;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .skip-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .skip-button:hover {
+            text-decoration: underline;
+        }
+
+        .video-preview-container {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            max-width: 100%;
+        }
+
+        .video-preview {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo" onclick="goToHome()">
+        <img src="{% static 'images/LITlogo.png' %}" alt="LearnIT Logo">
+        Learn<span class="it-part">IT</span>
+    </div>
+    <a href="#" class="skip-button" onclick="goBack()">Back</a>
+
+    <div class="container">
+        <h2>Edit Video</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <div class="error-message">
+                    {% for field in form %}
+                        {% if field.errors %}
+                            <strong>{{ field.label }}:</strong> {{ field.errors }}<br>
+                        {% endif %}
+                    {% endfor %}
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="id_title">Title</label>
+                {{ form.title }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_description">Description</label>
+                {{ form.description }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_video_file">Video File</label>
+                <input type="file" name="video_file" accept="video/*" class="form-control" />
+                <p>Current Video: <a href="{{ video.video_file.url }}" target="_blank">View Current Video</a></p>
+            </div>
+
+            <div class="video-preview-container" id="videoPreviewContainer" style="display: none;">
+                <video id="videoPreview" class="video-preview" controls></video>
+            </div>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+
+    <script>
+        function goToHome() {
+            window.location.href = '#'; 
+            console.log('LearnIT logo clicked');
+        }
+
+        function goBack() {
+            window.history.back();
+            console.log('Back button clicked');
+        }
+
+        const videoInput = document.querySelector('input[type="file"][name="video_file"]');
+        const videoPreviewContainer = document.getElementById('videoPreviewContainer');
+        const videoPreview = document.getElementById('videoPreview');
+
+        videoInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    videoPreview.src = e.target.result;
+                    videoPreviewContainer.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                videoPreview.src = '';
+                videoPreviewContainer.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #4F4557;
+    color: #E0E0E0;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 80px;
+}
+
+/* --- Header --- */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.brand-name {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.brand-name2 {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #89E9F3;
+    position: absolute; left: 50%; transform: translateX(20%);
+}
+
+.header-icons {
+    display: flex;
+    align-items: center;
+}
+
+.header-icons i {
+    margin-left: 25px;
+    font-size: 1.3em;
+    color: #89E9F3;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.header-icons i:hover {
+    color: #FFFFFF;
+}
+
+/* --- Search Bar --- */
+.search-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px 30px;
+    margin: 10px auto;
+    max-width: 600px;
+    position: relative;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 12px 45px 12px 20px;
+    border-radius: 25px;
+    border: none;
+    background-color: white;
+    color: #E0E0E0;
+    font-size: 1em;
+    outline: none;
+}
+
+.search-container input::placeholder {
+    color: #808090;
+}
+
+.search-container .search-icon {
+    position: absolute;
+    right: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #A0A0B0;
+    font-size: 1.1em;
+}
+
+/* --- Video Grid --- */
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    padding: 20px 30px;
+    max-width: 1400px;
+    margin: 20px auto;
+}
+
+/* --- Video Card --- */
+.video-card {
+    background-color: #3C3C54;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    padding: 15px 20px 10px 20px;
+}
+
+.card-header .title {
+    font-weight: bold;
+    margin: 0 0 5px 0;
+    font-size: 1em;
+    color: #FFFFFF;
+}
+
+.card-header .subtitle {
+    font-size: 0.85em;
+    color: #B0B0C0;
+    margin: 0;
+}
+
+.card-thumbnail {
+    min-height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 15px 15px 15px;
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    text-align: center;
+}
+
+/* --- Card Footer --- */
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px 15px 20px;
+    font-size: 0.8em;
+    color: #A0A0B0;
+    border-top: 1px solid #4a4a68;
+    margin-top: auto;
+}
+
+/* --- Bottom Navigation --- */
+.bottom-nav {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    display: flex;
+    gap: 15px;
+    background-color: rgba(40, 40, 62, 0.85);
+    padding: 12px 18px;
+    border-radius: 25px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.bottom-nav i {
+    font-size: 1.6em;
+    color: #89E9F3;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.bottom-nav i:hover {
+    color: #00D1FF;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .brand-name {
+        font-size: 1.4em;
+    }
+    .header-icons i {
+        margin-left: 15px;
+        font-size: 1.2em;
+        color: #89E9F3;
+    }
+    .search-container {
+        max-width: 90%;
+    }
+    .video-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 15px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .top-nav {
+        padding: 10px 15px;
+    }
+    .brand-name {
+        display: none;
+    }
+    .logo {
+        margin-right: auto;
+    }
+    .search-container input {
+        padding: 10px 40px 10px 15px;
+        font-size: 0.9em;
+    }
+    .search-container .search-icon {
+        right: 30px;
+    }
+    .video-grid {
+        grid-template-columns: 1fr;
+        padding: 10px 15px;
+    }
+    .bottom-nav {
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;
+        width: fit-content;
+        padding: 10px 15px;
+    }
+}

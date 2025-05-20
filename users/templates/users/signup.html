@@ -1,0 +1,278 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LearnIT - Sign Up</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #4f4557;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .signup-container {
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+      font-size: 26px;
+      color: #333;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .errorlist {
+      color: #e74c3c;
+      font-size: 13px;
+      margin-bottom: 10px;
+      padding-left: 20px;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      background-color: #4f4557;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #89e9f3;
+      color: #333;
+    }
+
+    p {
+      font-size: 14px;
+      color: #666;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    a {
+      color: #4f4557;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .terms-container {
+      margin-top: 15px;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .terms-container input {
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      font-size: 20px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .logo img {
+      height: 32px;
+      margin-right: 10px;
+    }
+
+    .logo .it-part {
+      color: #89e9f3;
+    }
+
+    .skip-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 14px;
+      color: white;
+      text-decoration: none;
+    }
+
+    #termsModal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      width: 90%;
+      max-width: 500px;
+      height: 60%;
+      overflow-y: auto;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      z-index: 1000;
+    }
+
+    #termsModal h2 {
+      color: #4f4557;
+      margin-bottom: 15px;
+    }
+
+    #termsModal ul {
+      font-size: 14px;
+      color: #333;
+      padding-left: 20px;
+    }
+
+    #termsModal button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4f4557;
+      color: white;
+      cursor: pointer;
+    }
+
+    .password-rules {
+      font-size: 13px;
+      margin-bottom: 10px;
+      line-height: 1.6;
+      color: #333;
+      padding-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo" onclick="goToHome()">
+    <img src="{% static 'images/LITlogo.png' %}" alt="LearnIT Logo">
+    Learn<span class="it-part">IT</span>
+  </div>
+
+  <a href="{% url 'login' %}" class="skip-button">Login</a>
+
+  <div class="signup-container">
+    <h1>Create an Account</h1>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="password-rules" id="password-rules">
+        <div id="rule-length">❌ At least 8 characters</div>
+        <div id="rule-number">❌ Contains a number</div>
+        <div id="rule-uppercase">❌ Contains an uppercase letter</div>
+        <div id="rule-lowercase">❌ Contains a lowercase letter</div>
+      </div>
+
+      <div class="terms-container">
+        <input type="checkbox" id="terms" required>
+        <label for="terms">
+          I agree to the <a href="#" onclick="showTerms(event)">Terms and Conditions</a>
+        </label>
+      </div>
+      <br>
+      <button type="submit">Register</button>
+    </form>
+    <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+  </div>
+
+  <div id="termsModal">
+    <h2>Terms and Conditions</h2>
+    <p>Welcome to LearnIT. By registering, you agree to the following terms:</p>
+    <ul>
+      <li>Provide accurate and truthful information.</li>
+      <li>Respect the community and post only relevant IT content.</li>
+      <li>Accounts may be suspended for misconduct.</li>
+      <li>Content is subject to moderation.</li>
+      <li>Your data is managed under our privacy policy.</li>
+      <li>Terms may change with prior notice.</li>
+    </ul>
+    <p>By continuing, you agree to these terms.</p>
+    <button onclick="closeTerms()">Close</button>
+  </div>
+
+  <script>
+    function goToHome() {
+      window.location.href = '/';
+    }
+
+    function showTerms(event) {
+      event.preventDefault();
+      document.getElementById('termsModal').style.display = 'block';
+    }
+
+    function closeTerms() {
+      document.getElementById('termsModal').style.display = 'none';
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const passwordInput = document.querySelector('input[name="password"]');
+      const form = document.querySelector('form');
+      const ruleLength = document.getElementById('rule-length');
+      const ruleNumber = document.getElementById('rule-number');
+      const ruleUppercase = document.getElementById('rule-uppercase');
+      const ruleLowercase = document.getElementById('rule-lowercase');
+
+      function updatePasswordRules() {
+        const value = passwordInput.value;
+
+        ruleLength.textContent = (value.length >= 8 ? "✅" : "❌") + " At least 8 characters";
+        ruleNumber.textContent = (/\d/.test(value) ? "✅" : "❌") + " Contains a number";
+        ruleUppercase.textContent = (/[A-Z]/.test(value) ? "✅" : "❌") + " Contains an uppercase letter";
+        ruleLowercase.textContent = (/[a-z]/.test(value) ? "✅" : "❌") + " Contains a lowercase letter";
+      }
+
+      passwordInput.addEventListener("input", updatePasswordRules);
+
+      form.addEventListener("submit", function (e) {
+        const value = passwordInput.value;
+        const isValid =
+          value.length >= 8 &&
+          /\d/.test(value) &&
+          /[A-Z]/.test(value) &&
+          /[a-z]/.test(value);
+
+        if (!isValid) {
+          e.preventDefault();
+          alert("Please meet all password requirements before submitting.");
+          updatePasswordRules();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

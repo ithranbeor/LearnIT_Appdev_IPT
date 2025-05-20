@@ -1,0 +1,132 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnIT - Terms of Service & Community Guidelines</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #4f4557;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #4f4557;
+            font-size: 24px;
+            margin-top: 30px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .logo img {
+            width: 150px;
+        }
+
+        .back-button {
+            text-decoration: none;
+            color: #4f4557;
+            font-size: 16px;
+            text-align: center;
+            display: block;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="{% static 'images/LITlogo.png' %}" alt="LearnIT Logo">
+            <h1>LearnIT - Terms of Service & Community Guidelines</h1>
+        </div>
+
+        <h2>Terms of Service</h2>
+        <p>By using <strong>LearnIT</strong>, you agree to the following terms and conditions. Please read them carefully:</p>
+        <ul>
+            <li><strong>Acceptance of Terms:</strong> By accessing or using the services provided by LearnIT, you agree to be bound by these Terms of Service and any applicable laws and regulations. If you do not agree with these terms, do not use the services.</li>
+            <li><strong>Account Responsibility:</strong> You are responsible for maintaining the confidentiality of your account information and for all activities under your account. If you suspect any unauthorized use of your account, you must notify us immediately.</li>
+            <li><strong>Content Submission:</strong> When you submit content to LearnIT, including videos, descriptions, and other materials, you confirm that you own or have the right to use that content. You grant LearnIT a non-exclusive, worldwide license to use, display, and distribute the content on the platform.</li>
+            <li><strong>Prohibited Content:</strong> You agree not to upload, post, or transmit content that:
+                <ul>
+                    <li>Violates intellectual property rights (including copyright or trademark infringement).</li>
+                    <li>Contains hate speech, threats, or violence.</li>
+                    <li>Promotes discrimination, harassment, or illegal activity.</li>
+                    <li>Includes pornography, nudity, or other inappropriate content.</li>
+                </ul>
+            </li>
+            <li><strong>Privacy and Data Collection:</strong> Your use of LearnIT may involve the collection of personal information. Please review our Privacy Policy for more details on how we collect, use, and protect your data.</li>
+            <li><strong>Suspension or Termination:</strong> LearnIT reserves the right to suspend or terminate your access to the platform if you violate these Terms of Service or engage in illegal or harmful activities. This includes the removal of any uploaded content that violates these terms.</li>
+            <li><strong>Modifications:</strong> LearnIT may modify these Terms of Service at any time, and the updated version will be posted on the website. Your continued use of the platform after such modifications constitutes acceptance of the new terms.</li>
+            <li><strong>Limitation of Liability:</strong> LearnIT is not liable for any direct, indirect, incidental, or consequential damages resulting from your use or inability to use the platform. We are not responsible for any loss of content or data.</li>
+            <li><strong>Governing Law:</strong> These Terms of Service are governed by the laws of the jurisdiction where LearnIT operates. Any disputes will be handled in the appropriate court within this jurisdiction.</li>
+        </ul>
+
+        <h2>Community Guidelines</h2>
+        <p>LearnIT is committed to creating a respectful and collaborative learning environment. By participating on the platform, you agree to adhere to the following guidelines:</p>
+        <ul>
+            <li><strong>Respectful Communication:</strong> Engage in constructive and respectful discussions. Discriminatory, abusive, or offensive language will not be tolerated. Be kind, professional, and open to others’ perspectives.</li>
+            <li><strong>No Harassment:</strong> Harassment, bullying, or any form of abuse toward other users is strictly prohibited. This includes messages, comments, or videos that threaten, belittle, or demean others.</li>
+            <li><strong>Copyright and Intellectual Property:</strong> Only upload content that you own or have permission to use. Do not infringe on the intellectual property rights of others. If you believe your work has been uploaded without permission, please report it to us.</li>
+            <li><strong>Safe and Educational Content:</strong> All videos and content should be appropriate for an educational setting. Content that is explicit, inappropriate, or unrelated to the purpose of LearnIT (educational and professional development) will be removed.</li>
+            <li><strong>No Spam:</strong> Spamming or flooding the platform with irrelevant content or advertisements is prohibited. Keep your contributions meaningful and relevant to the community.</li>
+            <li><strong>Privacy and Security:</strong> Respect others' privacy. Do not share private information about other users without their consent. Protect your own privacy by being mindful of the information you share.</li>
+            <li><strong>Reporting Violations:</strong> If you see content or behavior that violates these guidelines, please report it to LearnIT administrators. We take all reports seriously and will investigate promptly.</li>
+            <li><strong>Consequences for Violations:</strong> Failure to adhere to these Community Guidelines may result in content removal, account suspension, or a permanent ban from the platform.</li>
+        </ul>
+
+         <a href="#" class="back-button" onclick="goBack()">Back</a>
+    </div>
+
+    <script>
+        function goToHome() {
+            window.location.href = "{% url 'home' %}";
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+</body>
+</html>

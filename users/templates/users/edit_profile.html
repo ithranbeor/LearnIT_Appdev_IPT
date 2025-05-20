@@ -1,0 +1,204 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LearnIT - Edit Profile</title>
+  <style>
+    body {
+      background-color: #4f4557;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .signup-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 40px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 500px;
+    }
+
+    h1 {
+      color: #4f4557;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="file"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #ccc;
+      border-radius: 15px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+
+    button[type="submit"] {
+      background-color: #ffffff;
+      color: #4f4557;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #89E9F3;
+    }
+
+    .errorlist {
+      color: red;
+      margin: 0 0 10px 0;
+      list-style-type: disc;
+      padding-left: 20px;
+      text-align: left;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      text-align: left;
+      margin-bottom: 5px;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 15px;
+      color: #4f4557;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .logo img {
+      margin-right: 10px;
+      height: 40px;
+    }
+
+    .logo .it-part {
+      color: #89E9F3;
+    }
+
+    .skip-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .skip-button:hover {
+      text-decoration: underline;
+    }
+
+    .profile-picture-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border: 3px solid #4f4557;
+    }
+
+    .picture-label {
+      text-align: left;
+      font-weight: bold;
+      color: #333;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .user-info {
+      margin-bottom: 20px;
+      font-size: 16px;
+      color: #4f4557;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo" onclick="goToHome()">
+    <img src="{% static 'images/LITlogo.png' %}" alt="LearnIT Logo">
+    Learn<span class="it-part">IT</span>
+  </div>
+
+  <a href="{% url 'profile' %}" class="skip-button">Cancel</a>
+
+  <div class="signup-container">
+    <h1>Edit Your Profile</h1>
+
+    <!-- Show current profile picture if exists -->
+    {% if user.profile.picture %}
+      <img src="{{ user.profile.picture.url }}" alt="Current Profile Picture" class="profile-picture-preview">
+    {% endif %}
+
+    <!-- Display form with editable username and email -->
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <!-- Display current username and email as input fields -->
+      <div class="form-field">
+        <label for="id_username">Username:</label>
+        <input type="text" name="username" value="{{ user.username }}" id="id_username" class="form-control">
+      </div>
+
+      <div class="form-field">
+        <label for="id_email">Email:</label>
+        <input type="email" name="email" value="{{ user.email }}" id="id_email" class="form-control">
+      </div>
+
+      <div class="picture-label">Profile Picture</div>
+      {{ form.picture }} <!-- Render profile picture input -->
+
+      <div class="form-field">
+        {{ form.description }} <!-- Render description input -->
+      </div>
+
+      <button type="submit">Update Profile</button>
+    </form>
+  </div>
+
+  <script>
+    function goToHome() {
+      window.location.href = '/';
+    }
+
+    document.querySelector('input[type="file"]').addEventListener('change', function(event) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        const preview = document.querySelector('.profile-picture-preview');
+        preview.src = reader.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    });
+  </script>
+
+</body>
+</html>

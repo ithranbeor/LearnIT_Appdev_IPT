@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ video.title }}</title>
+</head>
+<body>
+    <h1>{{ video.title }}</h1>
+    <p>{{ video.description }}</p>
+    <video controls>
+        <source src="{{ video.file.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <form method="post" action="{% url 'add_comment' video.id %}">
+        {% csrf_token %}
+        <textarea name="content" placeholder="Write a comment..." required></textarea>
+        <button type="submit">Post Comment</button>
+    </form>
+    
+</body>
+</html>

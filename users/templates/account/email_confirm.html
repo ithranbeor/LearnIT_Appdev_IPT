@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div style="text-align: center; padding: 50px;">
+    <h2 style="color: #4f4557;">Email Confirmation</h2>
+    {% if confirmation %}
+        <p style="margin: 20px 0;">
+            Hi {{ confirmation.email_address.user.username }}, please click below to confirm your email address.
+        </p>
+        <form method="post" action=".">
+            {% csrf_token %}
+            <button type="submit" style="padding: 10px 20px; background-color: #4f4557; color: white; border: none; border-radius: 10px;">
+                Confirm My Email
+            </button>
+        </form>
+    {% else %}
+        <p style="color: red;">Invalid or expired confirmation link.</p>
+    {% endif %}
+</div>
+{% endblock %}

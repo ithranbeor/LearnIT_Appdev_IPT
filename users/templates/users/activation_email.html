@@ -1,0 +1,10 @@
+Hi {{ user.username }},
+
+Please click the link below to verify your email and activate your LearnIT account:
+
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+If you didn’t request this, ignore this email.
+
+Thanks,  
+The LearnIT Team

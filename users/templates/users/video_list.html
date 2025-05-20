@@ -1,0 +1,663 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnIT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #4F4557;
+            color: #E0E0E0;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 80px;
+            overflow-x: auto; /* Prevent horizontal scroll */
+        }
+
+        .comments-section {
+        margin-top: 20px;
+        }
+
+        .comment-item {
+            background-color: #2C2C3C;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .comment-item p {
+            margin: 0;
+            font-size: 1em;
+            color: #E0E0E0;
+        }
+
+        .comment-item span {
+            font-size: 10px;
+            color: #A0A0B0;
+            position: absolute;
+            bottom: 1px;
+            left: 10px;
+        }
+
+        .comment-actions {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+
+        .delete-button {
+            background: none;
+            border: none;
+            color: #E0E0E0;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        .delete-button:hover {
+            color: #FF4C4C;
+        }
+
+        /* --- Header --- */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            position: relative; /* To position the notification window */
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .brand-name {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #FFFFFF;
+            position: absolute; left: 45%; transform: translateX(20%);
+        }
+
+        .brand-name2 {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #89E9F3;
+            position: absolute; right: 48.8%; transform: translateX(20%);
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-icons i {
+            margin-left: 25px;
+            font-size: 1.3em;
+            color: #89E9F3;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .header-icons i:hover {
+            color: #FFFFFF;
+        }
+
+        /* --- Search Bar --- */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px 30px;
+            margin: 10px auto;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 45px 12px 20px;
+            border-radius: 25px;
+            border: none;
+            background-color: white;
+            color: #2C2C3C;
+            font-size: 1em;
+            outline: none;
+        }
+
+        .search-container input::placeholder {
+            color: #808090;
+        }
+
+        .search-container .search-icon {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #A0A0B0;
+            font-size: 1.1em;
+        }
+
+        /* --- Video Grid --- */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            padding: 20px 30px;
+            max-width: 1400px;
+            margin: 20px auto;
+        }
+
+        /* --- Video Card --- */
+        .video-card {
+            background-color: #3C3C54;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+            position: relative; /* Ensures the comments section can be absolutely positioned */
+        }
+        .video-card .title {
+            font-size: 1.2em;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 15px 20px 0 20px;
+            font-weight: bolder;
+        }
+        .video-card .subtitle {
+            font-size: 1.0em;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 15px 20px 0 20px;
+        }
+
+
+        .comments-section {
+            display: none; /* Start hidden */
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #2C2C3C;
+            padding: 10px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease;
+        }
+
+        .video-card.open .comments-section {
+            display: block;
+            max-height: 300px; /* You can adjust this value as needed */
+        }
+
+
+        .card-header {
+            padding: 15px 20px 10px 20px;
+        }
+
+        .card-header .title {
+            font-weight: bold;
+            margin: 0 0 5px 0;
+            font-size: 1em;
+            color: #FFFFFF;
+        }
+
+        .card-header .subtitle {
+            font-size: 0.85em;
+            color: #B0B0C0;
+            margin: 0;
+        }
+
+        .card-thumbnail {
+            width: auto;
+            height: auto;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 10px 10px 10px;
+            border-radius: 20px;
+            padding: 20px;
+            position: relative;
+            text-align: center;
+        }
+
+        .card-thumbnail video {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        /* --- Card Footer --- */
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 50px 15px 20px;
+            font-size: 0.8em;
+            color: #A0A0B0;
+            border-top: 1px solid #4a4a68;
+            margin-top: auto;
+        }
+
+        /* --- Bottom Navigation --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            background-color: rgba(40, 40, 62, 0.85);
+            padding: 12px 18px;
+            border-radius: 25px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .bottom-nav i {
+            font-size: 1.6em;
+            color: #89E9F3;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .bottom-nav i:hover {
+            color: #00D1FF;
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 768px) {
+            .brand-name {
+                font-size: 1.4em;
+            }
+            .header-icons i {
+                margin-left: 15px;
+                font-size: 1.2em;
+                color: #89E9F3;
+            }
+            .search-container {
+                max-width: 90%;
+            }
+            .video-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+                padding: 15px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-nav {
+                padding: 10px 15px;
+            }
+            .brand-name {
+                display: none;
+            }
+            .logo {
+                margin-right: auto;
+            }
+            .search-container input {
+                padding: 10px 40px 10px 15px;
+                font-size: 0.9em;
+            }
+            .search-container .search-icon {
+                right: 30px;
+            }
+            .video-grid {
+                grid-template-columns: 1fr;
+                padding: 10px 15px;
+            }
+            .bottom-nav {
+                left: 50%;
+                transform: translateX(-50%);
+                right: auto;
+                width: fit-content;
+                padding: 10px 15px;
+            }
+        }
+
+        .notification-window {
+            position: absolute;
+            top: 55px; 
+            right: 30px; 
+            background-color: #3C3C54;
+            color: #E0E0E0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            width: 300px; 
+            z-index: 10;
+            display: none; 
+        }
+
+        .notification-window h3 {
+            margin-top: 0;
+            color: #FFFFFF;
+            border-bottom: 1px solid #4a4a68;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .notification-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #4a4a68;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-item p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        .uploader-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .uploader-info img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            padding-top: 80px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            background-color: rgba(0,0,0,0.9);
+            color: white;
+        }
+
+        .modal-content {
+            background-color: #2c2c3c;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 15px;
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: #fff;
+        }
+        .toggle-comments-btn {
+            background-color: #3C3C54;
+            color: #E0E0E0;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        .toggle-comments-btn:hover {
+            background-color: #89E9F3;
+        }
+
+        .comments-section {
+            display: none; /* Start hidden */
+        }
+
+    </style>
+</head>
+<body>
+    <header class="top-nav">
+        <div class="logo">
+            <img src="{% static 'images/LITlogo.png' %}" alt="LearnIT Logo">
+        </div>
+        <div class="brand-name">Learn</div>
+        <div class="brand-name2">IT</div>
+        <div class="header-icons">
+            <i class="fas fa-search"></i>
+            <i class="fas fa-bell" id="notification-bell"></i>
+        </div>
+        <div class="notification-window" id="notification-window">
+            <h3>Notifications</h3>
+            <div class="notification-item">
+                <p>New course available: React for Beginners!</p>
+                <small>5 minutes ago</small>
+            </div>
+            <div class="notification-item">
+                <p>Your progress in Python Basics: 80%</p>
+                <small>30 minutes ago</small>
+            </div>
+            <div class="notification-item">
+                <p>Don't miss the live webinar on JavaScript!</p>
+                <small>1 hour ago</small>
+            </div>
+            </div>
+    </header>
+
+    <div class="search-container">
+        <input type="text" placeholder="Search something">
+        <i class="fas fa-search search-icon"></i>
+    </div>
+
+    <main class="video-grid">
+        {% for video in videos %}
+            <div class="video-card">
+                <p class="title">{{ video.title }}</p>
+                <p class="subtitle">{{ video.description }}</p>
+                <video controls>
+                    <source src="{{ video.video_file.url }}" type="video/mp4">
+                </video>
+                <div class="card-footer">
+                    <div class="uploader-info">
+                        {% if video.uploader.profile.picture %}
+                            <img src="{{ video.uploader.profile.picture.url }}" alt="Uploader Picture">
+                        {% else %}
+                            <img src="{% static 'image/default_profile.png' %}" alt="Default Uploader">
+                        {% endif %}
+                    </div>
+                    <span>{{ video.uploader.username }}</span>
+                    <span>{{ video.upload_date|date:"F j, Y" }}</span>
+                    <span>{{ video.views }} views</span>
+                </div>
+
+                <!-- Toggle Comments Button -->
+                <button class="toggle-comments-btn" onclick="toggleComments('{{ video.id }}')">
+                    Comment
+                </button>
+
+                <!-- Comments Section -->
+                <div class="comments-section" id="comments-section-{{ video.id }}">
+                    {% if user.is_authenticated %}
+                        <h3 class="toggle-comments-btn" onclick="toggleComments('{{ video.id }}')">
+                            Comment
+                        </h3>
+                        <form method="post" action="{% url 'home_add_comment' video.id %}" class="comment-form">
+                            {% csrf_token %}
+                            <input type="text" name="content" placeholder="Write a comment..." required>
+                            <button type="submit"><i class="fa-solid fa-share"></i></button>
+                        </form>
+                        {% for comment in video.comments.all %}
+                            <div class="comment-item">
+                                <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                                <span>{{ comment.created_at|date:"F j, Y, g:i a" }}</span>
+                                <div class="comment-actions">
+                                    {% if comment.user == user %}
+                                        <form method="post" action="{% url 'home_delete_comment' comment.id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="delete-button" title="Delete">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>No comments yet. Be the first to comment!</p>
+                        {% endfor %}
+                    
+                    {% else %}
+
+                        <div class="comment-item">
+                            <p>You need to <a href="{% url 'login' %}" style="color:#89E9F3; text-decoration:underline;">sign in</a> or 
+                            <a href="{% url 'signup' %}" style="color:#89E9F3; text-decoration:underline;">sign up</a> to comment.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p>No videos uploaded yet.</p>
+        {% endfor %}
+    </main>
+    
+    <div id="videoModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <video id="modalVideo" controls style="width: 100%; max-height: 400px; border-radius: 10px;">
+                <source src="" type="video/mp4">
+            </video>
+            <h3 id="modalTitle" style="margin-top: 15px;"></h3>
+            <p id="modalDescription"></p>
+        </div>
+    </div>
+       
+
+    <nav class="bottom-nav">
+        <a href="{% url 'home' %}">
+            <i class="fas fa-home"></i>
+        </a>
+        <a href="javascript:void(0);" onclick="showSignInMessage()">
+            <i class="fas fa-plus-circle"></i>
+        </a>
+        <a href="{% url 'profile' %}">
+            <i class="fas fa-user-circle"></i>
+        </a>
+    </nav>
+    
+    <!-- Modal for Sign-in/Sign-up message -->
+    <div id="signInModal" style="display:none; position:fixed; top:50%; left:50%; transform: translate(-50%, -50%); background-color:rgba(0,0,0,0.7); color:white; padding:20px; border-radius:5px; z-index:1000;">
+        <p>You need to <a href="{% url 'login' %}" style="color:#89E9F3; text-decoration:underline;">sign in</a> or 
+        <a href="{% url 'signup' %}" style="color:#89E9F3; text-decoration:underline;">sign up</a> to upload video.</p>
+    </div>
+    
+    <script>
+        // Function to show the modal
+        function showSignInMessage() {
+            document.getElementById("signInModal").style.display = "block";
+        }
+    
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById("signInModal").style.display = "none";
+        }
+    </script>    
+
+    <script>
+        const notificationBell = document.getElementById('notification-bell');
+        const notificationWindow = document.getElementById('notification-window');
+
+        notificationBell.addEventListener('click', () => {
+            notificationWindow.style.display = notificationWindow.style.display === 'none' ? 'block' : 'none';
+        });
+
+        document.addEventListener('click', (event) => {
+            if (notificationWindow.style.display === 'block' && !notificationWindow.contains(event.target) && event.target !== notificationBell) {
+                notificationWindow.style.display = 'none';
+            }
+        });
+    </script>
+    <script>
+        function openModal(videoUrl, title, description, videoId) {
+        document.getElementById("videoModal").style.display = "block";
+        document.getElementById("modalVideo").src = videoUrl;
+        document.getElementById("modalTitle").innerText = title;
+        document.getElementById("modalDescription").innerText = description;
+    }
+
+    function closeModal() {
+        document.getElementById("videoModal").style.display = "none";
+        document.getElementById("modalVideo").pause();
+    }
+    </script>
+    <script>
+        function toggleComments(videoId) {
+            var commentsSection = document.getElementById('comments-section-' + videoId);
+            var videoCard = commentsSection.closest('.video-card');
+            
+            if (commentsSection.style.display === "block") {
+                commentsSection.style.display = "none";
+                videoCard.classList.remove("open");  
+            } else {
+                commentsSection.style.display = "block";
+                videoCard.classList.add("open");  
+            }
+        }
+    </script>
+    <script>
+        document.querySelector('.search-container input').addEventListener('input', function () {
+            let searchQuery = this.value.toLowerCase();  
+            let videoCards = document.querySelectorAll('.video-card');  
+    
+            videoCards.forEach(function (card) {
+                let title = card.querySelector('.title').innerText.toLowerCase();
+                let description = card.querySelector('.subtitle').innerText.toLowerCase();
+                let username = card.querySelector('.card-footer span').innerText.toLowerCase();
+    
+                if (title.includes(searchQuery) || description.includes(searchQuery) || username.includes(searchQuery)) {
+                    card.style.visibility = 'visible';  
+                } else {
+                    card.style.visibility = 'hidden';  
+                }
+            });
+        });
+    
+        document.querySelector('.search-container input').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                this.dispatchEvent(new Event('input'));  
+            }
+        });
+    </script>
+   <script>
+    document.querySelector('.search-container input').addEventListener('input', function(event) {
+        const searchTerm = event.target.value.toLowerCase();
+        const videoCards = document.querySelectorAll('.video-card');
+        
+        videoCards.forEach(card => {
+            const title = card.querySelector('.title').textContent.toLowerCase();
+            const description = card.querySelector('.subtitle').textContent.toLowerCase();
+            
+            if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                card.style.order = '-1';
+            } else {
+                card.style.order = '';
+            }
+        });
+    });
+</script>
+</body>
+</html>
