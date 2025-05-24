@@ -13,10 +13,9 @@ class EditProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['description', 'picture']  # Don't include username and email here
+        fields = ['description', 'picture']  
 
     def __init__(self, *args, **kwargs):
-        # Pass user information to the form via initial data
         user = kwargs.pop('user', None)
         super(EditProfileForm, self).__init__(*args, **kwargs)
         if user:

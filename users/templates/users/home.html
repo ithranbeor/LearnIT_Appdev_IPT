@@ -701,50 +701,5 @@
             });
         });
     </script>
-    <script>
-    function performSearch() {
-        const query = document.getElementById("searchInput").value;
-        const category = document.querySelector("select[name='category']").value;
-        const resultsContainer = document.getElementById("searchResults");
-
-        fetch(`/users/ajax/video-search/?search=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`)
-            .then(res => res.json())
-            .then(data => {
-                const results = data.results;
-
-                // Clear previous results
-                resultsContainer.innerHTML = '';
-
-                if (results.length === 0) {
-                    resultsContainer.innerHTML = '<p>No videos found.</p>';
-                    return;
-                }
-
-                // Render each video
-                results.forEach(video => {
-                    const videoCard = document.createElement('div');
-                    videoCard.style.padding = '15px';
-                    videoCard.style.border = '1px solid #ccc';
-                    videoCard.style.borderRadius = '12px';
-                    videoCard.style.marginBottom = '10px';
-                    videoCard.style.backgroundColor = '#f9f9f9';
-
-                    videoCard.innerHTML = `
-                        <h3 style="margin: 0 0 5px;">${video.title}</h3>
-                        <p style="margin: 0 0 5px;"><strong>Uploader:</strong> ${video.uploader}</p>
-                        <p style="margin: 0 0 5px;"><strong>Category:</strong> ${video.category}</p>
-                        <p style="margin: 0;">${video.description}</p>
-                    `;
-
-                    resultsContainer.appendChild(videoCard);
-                });
-            })
-            .catch(err => {
-                console.error('Search failed:', err);
-                resultsContainer.innerHTML = '<p>Error fetching search results.</p>';
-            });
-    }
-    </script>
-
 </body>
 </html> 

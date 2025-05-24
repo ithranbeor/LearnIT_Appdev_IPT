@@ -1,7 +1,0 @@
-runtime: python39  # or python38, python311, etc.
-entrypoint: gunicorn -b :$PORT main:app  # if using Flask/Django etc.
-
-handlers:
-  - url: /.*
-    script: auto
-

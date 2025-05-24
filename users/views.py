@@ -38,34 +38,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import PermissionDenied
 
-from .ai_utils import get_semantic_matches
-from sentence_transformers import SentenceTransformer
 import numpy as np
 
 
-# Load once for efficiency
-model = SentenceTransformer('all-MiniLM-L6-v2')
-
-def get_semantic_matches(videos, query, top_k=5):
-    if not query:
-        return Video.objects.none()
-
-    query_embedding = model.encode(query)
-    query_embedding = np.array(query_embedding, dtype=np.float32)
-
-    results = []
-    for video in videos.exclude(embedding__isnull=True):
-        video_embedding = np.frombuffer(video.embedding, dtype=np.float32)
-        similarity = np.dot(query_embedding, video_embedding) / (
-            np.linalg.norm(query_embedding) * np.linalg.norm(video_embedding)
-        )
-        results.append((similarity, video))
-
-    # Sort by similarity and return top_k
-    top_matches = sorted(results, key=lambda x: x[0], reverse=True)[:top_k]
-    return Video.objects.filter(id__in=[v.id for _, v in top_matches])
-
-def video_search(request):
+def video_search(request): 
     search_query = request.GET.get('search', '')
     category = request.GET.get('category', '')
 
@@ -74,16 +50,11 @@ def video_search(request):
         videos = videos.filter(category=category)
 
     if search_query:
-        # Keyword matches
-        keyword_matches = videos.filter(
+        # Only keyword matches
+        videos = videos.filter(
             Q(title__icontains=search_query) |
             Q(description__icontains=search_query)
         )
-        # AI semantic matches
-        ai_matches = get_semantic_matches(videos, search_query)
-
-        # Combine both querysets and remove duplicates
-        videos = (keyword_matches | ai_matches).distinct()
     else:
         # No search query, show all or recent videos
         videos = videos.order_by('-upload_date')
